@@ -1,13 +1,16 @@
+
 import pytest
 
+from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selene import Browser, Config
+
 
 from utils import attach
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='function', autouse=True)
 def setup_browser(request):
+    browser.config.base_url = 'https://staging.azalianow.shop/'
     browser_version = "100.0"
     options = Options()
     selenoid_capabilities = {
@@ -24,7 +27,7 @@ def setup_browser(request):
         options=options
     )
 
-    browser = Browser(Config(driver))
+    browser.config.driver = driver
     yield browser
 
     attach.add_screenshot(browser)

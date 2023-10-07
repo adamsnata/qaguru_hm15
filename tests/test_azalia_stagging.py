@@ -1,5 +1,5 @@
 import allure
-from selene import have, browser
+from selene import have, browser, be
 from selene.support.shared import browser
 
 
@@ -7,22 +7,23 @@ from selene.support.shared import browser
 def test_check_empty_favorites():
     browser.open('')
     browser.element('[data-testid="banner-mobile-app-close"]').click()  # close advertisment
-    browser.all('[data-testid="favorites"]')[1].click()  # TODO NATALIE FILTER VISIBLE
+    browser.all('[data-testid="favorites"]').filtered_by(be.visible).first.click()
+    #browser.all('[data-testid="favorites"]')[1].click()
     browser.element('[class^="Favorites_empty__title__"]').should(have.exact_text('Здесь пока пусто'))
 
 
 @allure.title("Проверка что есть 2 города на главной странице")
 def test_check_2_cities():
-    browser.open('https://staging.azalianow.shop/')
+    browser.open('')
     browser.element('[data-testid="banner-mobile-app-close"]').click()  # close advertisment
-    browser.element('[data-testid="geo-toggler"]').click()  # click listbox cities
+    browser.all('[data-testid="geo-toggler"]').filtered_by(be.visible).first.click()  # click listbox cities
     browser.all('[data-testid="geo-item"]')[0].should(have.text('Москва и Московская область'))
     browser.all('[data-testid="geo-item"]')[1].should(have.text('Нижний Новгород и Нижегородская область'))
 
 
 @allure.title("Проверка что корзина изначально пустая")
 def test_check_bin():
-    browser.open('https://staging.azalianow.shop/')
+    browser.open('')
     browser.element('[data-testid="banner-mobile-app-close"]').click()  # close advertisment
     browser.all('[data-testid="checkout"]')[1].click()  # click bin
     browser.element('[class^="Favorites_empty__title__"]').should(have.text('В корзине пусто'))
